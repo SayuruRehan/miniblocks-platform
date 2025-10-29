@@ -195,9 +195,9 @@ Please provide a helpful response as Pika, considering the user's current contex
             />
 
             {/* Chat card */}
-            <div className="bg-white p-4 rounded-lg shadow-lg w-80 max-h-96 flex flex-col">
+            <div className="bg-white p-4 rounded-lg shadow-lg w-96 h-96 flex flex-col">
               {/* Chat history */}
-              <div className="flex-1 overflow-y-auto mb-4 max-h-48">
+              <div className="flex-1 overflow-y-auto mb-4 max-h-72">
                 {chatHistory.length > 0 ? (
                   <div className="space-y-3">
                     {chatHistory.slice(-6).map((msg, index) => (
