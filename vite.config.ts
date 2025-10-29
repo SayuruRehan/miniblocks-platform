@@ -12,6 +12,6 @@ export default defineConfig({
     },
   },
   define: {
-    'import.meta.env.REACT_APP_GEMINI_API_KEY': JSON.stringify('AIzaSyBW6XKhpcRVHrthjvUBmyLHxTW7DJooWaA')
+    'import.meta.env.REACT_APP_GEMINI_API_KEY': JSON.stringify('AIzaSyAMC8rAvLAJuB6X31_kzR3d1nr8SgnNvBM')
   }
 })
