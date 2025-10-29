@@ -30,6 +30,18 @@ const PikaMascot = () => {
   const apiKey = import.meta.env.REACT_APP_GEMINI_API_KEY;
   const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 
+  // Sanitize AI responses:
+  // - remove sequences of 4+ asterisks (e.g. "****")
+  // - remove markdown bold markers (**bold**) but preserve inner text
+  const sanitizeAIText = (text: string) => {
+    if (!text) return text;
+    // remove run of 4 or more asterisks
+    let sanitized = text.replace(/\*{4,}/g, '');
+    // unwrap bold markers but keep content
+    sanitized = sanitized.replace(/\*\*(.*?)\*\*/gs, '$1');
+    return sanitized;
+  };
+
   const generateAIResponse = async (userMessage: string): Promise<string> => {
     if (!genAI) {
       return "I'm sorry, but I need an API key to be configured to help you properly. Please check your .env file and add REACT_APP_GEMINI_API_KEY.";
@@ -126,7 +138,8 @@ Please provide a helpful response as Pika, considering the user's current contex
 
       const result = await model.generateContent(prompt);
       const response = result.response;
-      return response.text();
+      const rawText = await response.text();
+      return sanitizeAIText(rawText);
       
     } catch (error) {
       console.error('Error generating AI response:', error);
@@ -148,9 +161,10 @@ Please provide a helpful response as Pika, considering the user's current contex
     try {
       // Generate AI response
       const aiResponse = await generateAIResponse(currentMessage);
-      
+      const sanitized = sanitizeAIText(aiResponse);
+
       // Add Pika's response to chat
-      const pikaMessage = { type: 'pika' as const, text: aiResponse };
+      const pikaMessage = { type: 'pika' as const, text: sanitized };
       setChatHistory(prev => [...prev, pikaMessage]);
       
     } catch (error) {
